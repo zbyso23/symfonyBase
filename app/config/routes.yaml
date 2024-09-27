@@ -1,0 +1,21 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+message_index:
+    path: /message
+    controller: App\Controller\MessageController::index
+
+user_register:
+    path: /register
+    controller: App\Controller\UserController::register
+
+order_create:
+    path: /order/create
+    controller: App\Controller\OrderController::createOrder
+
+order_list:
+    path: /order/list
+    controller: App\Controller\OrderController::listOrders
