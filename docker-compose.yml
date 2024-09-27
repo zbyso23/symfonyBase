@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  php:
+    image: php:8.3-fpm
+    container_name: php
+    volumes:
+      - ./app:/var/www/html
+    environment:
+      - APP_ENV=dev
+    working_dir: /var/www/html
+    networks:
+      - app-network
+    # Přidáme krok pro instalaci Composeru
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_USER: symfony
+      POSTGRES_PASSWORD: symfony
+      POSTGRES_DB: symfony
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
+
